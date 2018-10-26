@@ -3,9 +3,8 @@
 #include "util.h"
 
 #include <PI_Dragonfly.h>
-#include <csignal>
 #include <iostream>
-#include <sstream>
+//#include <dragonfly_msgs/CameraImage.h>
 
 int main(int argc, char **argv)
 {

@@ -127,10 +127,6 @@ target_include_directories(${PROJECT_NAME}_data_streamer PRIVATE ${CMAKE_CURRENT
 set_target_properties(${PROJECT_NAME}_data_streamer PROPERTIES OUTPUT_NAME data_streamer PREFIX "")
 
 
-#add_executable(dump_image_imu src/dump_image_imu.cpp src/util.cpp)
-#target_link_libraries(dump_image_imu PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/lib/libPI_DragonFly.a argus_socketclient EGL nvbuf_utils pthread)
-#target_include_directories(dump_image_imu PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
 #   src/${PROJECT_NAME}/dragonfly.cpp
