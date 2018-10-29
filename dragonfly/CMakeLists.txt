@@ -10,6 +10,8 @@ add_compile_options(-std=c++11)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   sensor_msgs
+  image_transport
+  cv_bridge
 )
 
 find_package(OpenCV REQUIRED PATHS /usr/lib)
