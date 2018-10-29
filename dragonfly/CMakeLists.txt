@@ -9,8 +9,10 @@ add_compile_options(-std=c++11)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   roscpp
-  std_msgs
+  sensor_msgs
 )
+
+find_package(OpenCV REQUIRED PATHS /usr/lib)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -117,15 +119,23 @@ catkin_package(
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
 )
 
 link_directories(/usr/lib/aarch64-linux-gnu/tegra/)
 add_executable(${PROJECT_NAME}_data_streamer src/data_streamer_node.cpp src/util.cpp)
-target_link_libraries(${PROJECT_NAME}_data_streamer ${catkin_LIBRARIES} ${CMAKE_CURRENT_SOURCE_DIR}/lib/libPI_DragonFly.a argus_socketclient EGL nvbuf_utils pthread)
+target_link_libraries(${PROJECT_NAME}_data_streamer 
+                          ${catkin_LIBRARIES} 
+                          ${CMAKE_CURRENT_SOURCE_DIR}/lib/libPI_DragonFly.a
+                          ${OpenCV_LIBS} 
+                          argus_socketclient 
+                          EGL 
+                          nvbuf_utils 
+                          pthread
+)
 target_include_directories(${PROJECT_NAME}_data_streamer PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-#add_dependencies(data_streamer dragonfly_generate_messages_cpp)
 set_target_properties(${PROJECT_NAME}_data_streamer PROPERTIES OUTPUT_NAME data_streamer PREFIX "")
-
+#add_dependencies(data_streamer dragonfly_generate_messages_cpp)
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}

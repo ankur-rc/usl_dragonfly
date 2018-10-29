@@ -1,10 +1,17 @@
 #include "ros/ros.h"
-#include "std_msgs/String.h"
 #include "util.h"
 
 #include <PI_Dragonfly.h>
 #include <iostream>
-//#include <dragonfly_msgs/CameraImage.h>
+#include <sensor_msgs/Image.h>
+
+#include<opencv2/core/core.hpp>
+#include<opencv2/highgui/highgui.hpp>
+#include<opencv2/imgproc/imgproc.hpp>
+#include<exception>
+ 
+const int WIDTH = 1280;
+const int HEIGHT = 720;
 
 int main(int argc, char **argv)
 {
@@ -15,19 +22,34 @@ int main(int argc, char **argv)
   PI::ImageReader imageReader;
   PI::ImageData imageleft_front{};
 
-  ros::Publisher publisher = n.advertise<std_msgs::String>("left_front", 150);
+  ros::Publisher publisher = n.advertise<sensor_msgs::Image>("left_front", 10);
 
   ros::Rate loop_rate(30);
 
-  int count = 0;
   while (ros::ok())
   {
-    std_msgs::String msg;
+    sensor_msgs::Image img;
 
     if (imageReader.Get_l_f(imageleft_front)) {
-       ROS_INFO("%sRead image successfully!\n", imageleft_front.name.c_str());
-       msg.data = imageleft_front.name;
-       publisher.publish(msg);
+       ROS_INFO("'Read image successfully!\n");
+ 
+       //unsigned char raw_img_arr[1382400];
+       //std::copy(imageleft_front.data.begin(), imageleft_front.data.end(), raw_img_arr);
+
+	    try{
+		 cv::Mat yuv_img(HEIGHT*3/2, WIDTH, CV_8UC1, imageleft_front.data.data());
+		 cv::Mat bgr_img;
+		 cv::cvtColor(yuv_img, bgr_img, cv::COLOR_YUV2BGR_I420);
+
+		 //img.image = imageleft_front.data;
+		 //img.name = imageleft_front.name;
+		 //img.timestamp = imageleft_front.tms;
+		 //publisher.publish(img);
+		 //cv::imwrite("/home/ubuntu/abc.jpg", bgr_img);
+
+	    } catch(std::exception &e){
+		cout<<e.what()<<endl;
+		}
 
     } else {
        ROS_ERROR("%sRead Failed retry\n", __FUNCTION__);
@@ -37,7 +59,6 @@ int main(int argc, char **argv)
     ros::spinOnce();
 
     loop_rate.sleep();
-    ++count;
   }
 
   return 0;
