@@ -3,7 +3,10 @@
 #include <string>
 #include <thread>
 #include <vector>
+#include <map>
+
 namespace PI {
+
 const int image_yuv_size = 1280 * 720 * 3 / 2;
 
 struct ImageData {
@@ -35,4 +38,5 @@ class ImageReader {
   std::thread trigthread;
   void Run();
 };
-}  // namespace PI
+
+}

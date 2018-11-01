@@ -1,0 +1,5 @@
+fps: 30
+active_cams : [0, 1, 2, 3]
+scale_x: 0.5
+scale_y: 0.5            
+

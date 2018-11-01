@@ -1,0 +1,15 @@
+<launch>
+
+    <rosparam command="load" file="$(find dragonfly)/config/dragonfly_cameras.yaml" />  
+
+    <arg name="namespace" default="dragonfly" /> 
+
+    <node name="dragonfly" pkg="dragonfly" type="data_streamer" output="screen">      
+        <remap from="front_left" to="$(arg namespace)/camera/front_left"/>
+        <remap from="front_right" to="$(arg namespace)/camera/front_right"/>
+        <remap from="back_right" to="$(arg namespace)/camera/back_right"/>
+        <remap from="back_left" to="$(arg namespace)/camera/back_left"/>
+    </node>
+
+</launch>
+
