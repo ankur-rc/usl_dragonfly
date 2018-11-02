@@ -1,5 +1,10 @@
 fps: 30
-active_cams : [0, 1, 2, 3]
+active_cams : [0]
 scale_x: 0.5
 scale_y: 0.5            
 
+# cam index map:
+# 0: front left
+# 1: front right
+# 2: back right
+# 3: back left

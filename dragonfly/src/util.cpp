@@ -17,11 +17,17 @@ const int height = 720;
 
 cv_bridge::CvImagePtr raw_to_bgr(PI::ImageData &raw_img, ros::Time tms, double &scale_x, double &scale_y, std::string header){
 
+  // convert from raw binary to IYUV format
   cv::Mat yuv_img(height*3/2, width, CV_8UC1, raw_img.data.data());
+
+  // convert from IYUV to BGR8 color space
   cv::Mat bgr_img;
   cv::cvtColor(yuv_img, bgr_img, cv::COLOR_YUV2BGR_I420);
+
+  // scale image
   cv::resize(bgr_img, bgr_img, cv::Size(), scale_x, scale_y, CV_INTER_AREA);
 
+  // hand over to cv_bridge
   cv_bridge::CvImagePtr cv_ptr(new cv_bridge::CvImage);
   cv_ptr->header.stamp = tms;
   cv_ptr->header.frame_id = header;
@@ -60,7 +66,10 @@ void init_settings(ros::NodeHandle& n, int& fps, double& scale_x,
 
   // set active camera indices
   if (n.getParam("active_cams", active_cams)){
-    ROS_INFO("Got 'active_cams'");
+    ROS_INFO("Got 'active_cams':");
+    for(auto i: active_cams){
+      ROS_INFO("Active: %d", i);
+    }
   }else{
     ROS_FATAL("Failed to get param 'active_cams'");
   }

@@ -14,15 +14,18 @@
 int main(int argc, char **argv)
 {
 
+  // configuration holders
   int fps;
   std::vector<int> active_cams;
   double scale_x, scale_y;
 
   ros::init(argc, argv, "dragonfly");
   ros::NodeHandle n;
-
+  
+  // configure
   init_settings(n, fps, scale_x, scale_y, active_cams);
 
+  // holders
   PI::ImageReader imageReader;
   PI::ImageData imageleft_front{};
   PI::ImageData imageright_front{};
@@ -35,6 +38,7 @@ int main(int argc, char **argv)
   image_transport::Publisher publisher_rb;
   image_transport::Publisher publisher_lb;
   
+  // transport topics initialise
   for(auto i: active_cams){
     switch(i){
       case 0: publisher_lf = transport.advertise("/front_left", 5);
@@ -54,9 +58,12 @@ int main(int argc, char **argv)
   {
     if (imageReader.ReadAll(imageleft_front, imageleft_back, imageright_back, imageright_front)) {
       ROS_INFO("Read image successfully!\n");
+      // timestamp (same for all images)
       ros::Time tms = ros::Time::now();
       try{
+        // image pointer
         cv_bridge::CvImagePtr cv_ptr;
+
         for(auto i: active_cams){
           switch(i){
             case 0: cv_ptr = raw_to_bgr(imageleft_front, tms, scale_x, scale_y, "cam_lf");
